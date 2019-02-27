@@ -29,6 +29,17 @@ module Jekyll
           options = configuration_from_options(options)
           site = Jekyll::Site.new(options)
 
+          plugins_dir = options.fetch("plugins_dir")
+          
+          begin
+            plugins_dir.each do |dir|
+              Integer(dir)
+              Jekyll.logger.warn "Did you mean -P <integer>?"
+            end
+          rescue ArgumentError
+            nil
+          end
+
           if options.fetch("skip_initial_build", false)
             Jekyll.logger.warn "Build Warning:", "Skipping the initial build." \
                                " This may result in an out-of-date site."
